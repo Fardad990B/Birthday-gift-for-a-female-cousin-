@@ -1,0 +1,385 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>یه سورپرایز برای تو 💗</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: Tahoma, sans-serif;
+      background: linear-gradient(
+        135deg, #ffe4ef, #fff3f7, #f3dcff
+      );
+      color: #a93e72;
+    }
+
+    .background {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .floating {
+      position: absolute;
+      font-size: 30px;
+      opacity: .55;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .floating:nth-child(1) {
+      top: 12%; left: 12%;
+    }
+    .floating:nth-child(2) {
+      top: 22%; right: 12%;
+      animation-delay: 1s;
+    }
+    .floating:nth-child(3) {
+      bottom: 15%; left: 15%;
+      animation-delay: 2s;
+    }
+    .floating:nth-child(4) {
+      bottom: 18%; right: 13%;
+      animation-delay: .5s;
+    }
+    .floating:nth-child(5) {
+      top: 8%; left: 48%;
+      animation-delay: 1.5s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(-8deg); }
+      50% { transform: translateY(-20px) rotate(8deg); }
+    }
+
+    h1 {
+      font-size: clamp(23px, 6vw, 35px);
+      text-align: center;
+      margin-bottom: 12px;
+      animation: fadeIn 1s ease;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #b96e92;
+    }
+
+    .stage {
+      width: 100%;
+      height: 370px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 95px;
+    }
+
+    .envelope {
+      position: relative;
+      width: min(350px, 84vw);
+      aspect-ratio: 350 / 230;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      filter: drop-shadow(0 17px 20px #da88a066);
+      animation: appear 1s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .back {
+      position: absolute;
+      inset: 0;
+      background: #f5abc5;
+      border-radius: 9px;
+    }
+
+    .letter {
+      position: absolute;
+      width: 90%;
+      height: 98%;
+      left: 5%;
+      bottom: 6%;
+      padding: 20px 14px;
+      border-radius: 12px;
+      background: #fffafc;
+      box-shadow: 0 4px 18px #c9698c33;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transform: translateY(24%);
+      transition: transform .9s ease;
+      z-index: 2;
+    }
+
+    .letter h2 {
+      font-size: clamp(19px, 5vw, 25px);
+      color: #e35c97;
+      margin: 8px 0;
+    }
+
+    .letter p {
+      font-size: clamp(12px, 3.4vw, 14px);
+      line-height: 1.9;
+      color: #965b79;
+    }
+
+    .letter .cake {
+      font-size: 30px;
+    }
+
+    .letter .signature {
+      margin-top: 9px;
+      color: #e577a6;
+      font-weight: bold;
+    }
+
+    .front {
+      position: absolute;
+      inset: 0;
+      background: #f18db0;
+      clip-path: polygon(
+        0 0, 50% 53%, 100% 0,
+        100% 100%, 0 100%
+      );
+      border-radius: 0 0 9px 9px;
+      z-index: 3;
+    }
+
+    .flap {
+      position: absolute;
+      inset: 0;
+      background: #ffc0d5;
+      clip-path: polygon(0 0, 100% 0, 50% 54%);
+      transform-origin: top center;
+      transition: transform .7s ease, z-index .1s;
+      z-index: 4;
+    }
+
+    .seal {
+      position: absolute;
+      top: 42%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 43px;
+      z-index: 5;
+      transition: opacity .3s;
+      filter: drop-shadow(0 3px 3px #bc527844);
+    }
+
+    .envelope.open .flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .envelope.open .seal {
+      opacity: 0;
+    }
+
+    .envelope.open .letter {
+      transform: translateY(-73%);
+      transition-delay: .45s;
+    }
+
+    .envelope.show-letter .letter {
+      z-index: 6;
+    }
+
+    .hint {
+      font-size: 14px;
+      color: #af678c;
+      text-align: center;
+      animation: pulse 2s infinite;
+    }
+
+    .confetti {
+      position: fixed;
+      top: 48%;
+      left: 50%;
+      width: 9px;
+      height: 13px;
+      border-radius: 3px;
+      pointer-events: none;
+      z-index: 20;
+      animation: burst 2.2s ease-out forwards;
+    }
+
+    @keyframes burst {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0);
+      }
+      100% {
+        opacity: 0;
+        transform:
+          translate(var(--x), var(--y))
+          rotate(var(--r));
+      }
+    }
+
+    @keyframes pulse {
+      50% { transform: scale(1.07); opacity: .6; }
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: scale(.7); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-height: 650px) {
+      .stage {
+        height: 310px;
+        padding-top: 65px;
+      }
+      .envelope {
+        width: min(290px, 74vw);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .floating, .hint {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="background">
+    <span class="floating">💕</span>
+    <span class="floating">🎀</span>
+    <span class="floating">✨</span>
+    <span class="floating">🌸</span>
+    <span class="floating">💗</span>
+  </div>
+
+  <h1 id="heading">یه نامه کوچولو برای تو 💌</h1>
+  <p class="subtitle">یه سورپرایز قشنگ اینجا منتظرته...</p>
+
+  <div class="stage">
+    <button class="envelope" id="envelope"
+            aria-label="باز کردن نامه تولد"
+            aria-expanded="false">
+
+      <div class="back"></div>
+
+      <div class="letter">
+        <span class="cake">🎂🎀</span>
+
+        <h2>تولدت مبارک ! 💖</h2>
+
+        <p>
+          امیدوارم امسال برات پر از
+          اتفاقای قشنگ، خنده‌های از ته دل
+          و آرزوهای برآورده‌شده باشه! 🌷
+          <br>
+          تو درس هات موفق باشی ✨
+        </p>
+
+        <p class="signature">💕</p>
+      </div>
+
+      <div class="front"></div>
+      <div class="flap"></div>
+      <span class="seal">💗</span>
+
+    </button>
+  </div>
+
+  <p class="hint" id="hint">👆 روی قلب پاکت بزن!</p>
+
+  <script>
+    const envelope = document.getElementById("envelope");
+    const heading = document.getElementById("heading");
+    const hint = document.getElementById("hint");
+
+    let isOpen = false;
+    let letterTimer;
+
+    envelope.addEventListener("click", () => {
+      isOpen = !isOpen;
+      clearTimeout(letterTimer);
+
+      if (isOpen) {
+        envelope.classList.add("open");
+        envelope.setAttribute("aria-expanded", "true");
+
+        heading.textContent = "Happy Birthday! 🎉💗";
+        hint.textContent = "برای بستن نامه دوباره روش بزن 💌";
+
+        letterTimer = setTimeout(() => {
+          envelope.classList.add("show-letter");
+        }, 850);
+
+        celebrate();
+      } else {
+        envelope.classList.remove("show-letter");
+        envelope.classList.remove("open");
+        envelope.setAttribute("aria-expanded", "false");
+
+        heading.textContent = "یه نامه کوچولو برای تو 💌";
+        hint.textContent = "👆 روی قلب پاکت بزن!";
+      }
+    });
+
+    function celebrate() {
+      const colors = [
+        "#ff83b6", "#ffd166", "#c8a2ff",
+        "#ff6b91", "#ffffff", "#a7e9dd"
+      ];
+
+      for (let i = 0; i < 65; i++) {
+        const piece = document.createElement("span");
+        piece.className = "confetti";
+
+        piece.style.background =
+          colors[Math.floor(Math.random() * colors.length)];
+
+        piece.style.setProperty(
+          "--x", `${(Math.random() - .5) * 850}px`
+        );
+
+        piece.style.setProperty(
+          "--y", `${(Math.random() - .5) * 850}px`
+        );
+
+        piece.style.setProperty(
+          "--r", `${Math.random() * 1100}deg`
+        );
+
+        piece.style.animationDelay =
+          `${Math.random() * .3}s`;
+
+        document.body.appendChild(piece);
+
+        piece.addEventListener("animationend", () => {
+          piece.remove();
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>
